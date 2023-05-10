@@ -65,7 +65,7 @@
 # History 3.5 :
 #   - updated libs in Dockerfile
 #   - bump WISARD-CI to 3.1.14
-#   - enabled OPENMP back again 
+#   - enabled OPENMP back again
 # History 3.6 :
 #   - updated BSMEM to 2.3.0
 #   - updated MiRA
@@ -117,11 +117,11 @@ OImaging-uws.war: ../../../target/OImaging-uws.war
 	cd -
 
 run:
-	docker rm oiservices || true
-	docker run -it --name oiservices --memory 8g --memory-swappiness 0 -p 8080:8080 $(NAME):$(VERSION)
+	docker rm $(NAME) || true
+	docker run -it --name $(NAME) --memory 8g --memory-swappiness 0 -p 8080:8080 $(NAME):$(VERSION)
 
 shell:
-	docker exec -it oiservices /bin/bash
+	docker exec -it $(NAME) /bin/bash
 
 $(TAR_FILE):
 	docker save -o $(TAR_FILE) $(NAME):$(VERSION)
