@@ -76,12 +76,14 @@
 #   - upgraded BSMEM-CI (collect sources from gitlab.com)
 # History 3.7.0 (2022.07.20):
 #   - upgraded Sparco plugin (mira-sparco-multi from kluskaj)
+# History 3.7.1 (2023.05.10):
+#   - fix GDL build
 #
 
 
 
 
-VERSION=3.7.0
+VERSION=3.7.1
 NAME=oiservices
 
 TAR_FILE=$(NAME)-$(VERSION).tar
