@@ -74,12 +74,11 @@
 #   - upgraded Sparco plugin (mira-sparco-multi from kluskaj)
 # History 3.7.1 (2023.05.10):
 #   - fix GDL build
-#
+# History 3.7.2 (2024.09.16):
+#   - updated docker base image moving to tomcat10 using webapps-javaee migration folder
 
 
-
-
-VERSION=3.7.1
+VERSION=3.7.2
 
 TAR_FILE=$(NAME)-$(VERSION).tar
 

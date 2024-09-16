@@ -1,8 +1,7 @@
 # Exposes UWS services - Work In Progress
 # https://hub.docker.com/_/tomcat/
 #
-# debian buster (slim) with tomcat 8.5 / OpenJDK 8
-FROM tomcat:8.5-jdk8-openjdk-slim-buster
+FROM tomcat:10-jdk11-temurin-jammy
 
 ###################################
 #
@@ -11,11 +10,11 @@ FROM tomcat:8.5-jdk8-openjdk-slim-buster
 
 # ALWAYS RUN apt-get update && apt-get install -y --no-install-recommends
 
-# add french mirror (speedup ?) with non-free (for pgplot5)
-ADD debian_fr_sources.list /etc/apt/sources.list
+# Running docker with ubuntu distribution
+ENV DEBIAN_FRONTEND=noninteractive
 
 RUN set -eux ; \
-    apt-get install apt-transport-https && \
+    apt-get install apt-transport-https -y && \
     apt-get update && apt-get upgrade -y && \
 # Add vi, top, ps, vi:
     apt-get install -y --no-install-recommends procps vim wget && \
@@ -34,7 +33,10 @@ RUN set -eux ; \
 # For Production:
 # -Ofast or -ffast-math disables NaN handling
 # see https://stackoverflow.com/questions/27315941/gcc-ofast-complete-list-of-limitations
-ARG GCC_OPTS="-O3 -march=broadwell -mfpmath=sse -fomit-frame-pointer -fstrict-aliasing -DNDEBUG -pipe"
+#ARG GCC_OPTS="-O3 -march=broadwell -mfpmath=sse -fomit-frame-pointer -fstrict-aliasing -DNDEBUG -pipe"
+
+# LBO: use native to get max performance on local machine
+ARG GCC_OPTS="-O3 -march=native -mfpmath=sse -fomit-frame-pointer -fstrict-aliasing -DNDEBUG -pipe"
 
 ARG USE_VALGRIND=0
 # For Valgrind:
@@ -320,8 +322,14 @@ RUN set -eux ; \
 
 
 # Auto-deploy OImaging-uws.war on startup
-# note: CONTEXT_PATH is not honored : app dir is the basename of the war (OImaging-uws here)
-ADD OImaging-uws.war /usr/local/tomcat/webapps/
+# notes:
+# - CONTEXT_PATH is not honored : app dir is the basename of the war (OImaging-uws here)
+# - use webapps-javaee to take advantage of tomcat10 migration keeping our war using "old" Java EE before moving to Jakarta EE
+ENV INSTALL_WEBAPPDIR=$CATALINA_HOME/webapps-javaee 
+RUN mkdir $INSTALL_WEBAPPDIR && \
+    chown -R tomcat:tomcat $INSTALL_WEBAPPDIR && \
+    echo "Installing war into the migration webapps-javaee folder : $INSTALL_WEBAPPDIR"
+ADD OImaging-uws.war $INSTALL_WEBAPPDIR
 
 
 # Add run_catalina.sh to set env vars:
