@@ -78,7 +78,15 @@
 #   - updated docker base image moving to tomcat10 using webapps-javaee migration folder
 
 
-VERSION=3.7.2
+VERSION=3.7.3
 
 TAR_FILE=$(NAME)-$(VERSION).tar
+
+# Define the max running jobs on the OImaging server within docker (hard-coded as docker image is not prepared on server VM)
+SERVER_MAX_JOBS:=8
+
+SERVER_MEM_LIMIT:=8g
+SERVER_PORT:=81
+
+# EoF
 

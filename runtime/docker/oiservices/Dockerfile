@@ -334,9 +334,15 @@ ADD OImaging-uws.war $INSTALL_WEBAPPDIR
 
 # Add run_catalina.sh to set env vars:
 ADD run_catalina.sh /usr/local/tomcat/bin/
+ADD setenv.sh /usr/local/tomcat/bin/
+
 CMD ["run_catalina.sh"]
 
 # Define USER to restrict privileges (not root) once image is production ready:
 USER tomcat
 EXPOSE 8080
+
+# Set max server jobs (default 4):
+ARG SERVER_MAX_JOBS=4
+ENV SERVER_MAX_JOBS=${SERVER_MAX_JOBS}
 
