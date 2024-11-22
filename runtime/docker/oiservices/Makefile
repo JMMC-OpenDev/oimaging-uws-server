@@ -19,6 +19,9 @@ OMP_THREAD_LIMIT:=1
 # use all threads for make jobs:
 NTHREADS := $(shell getconf _NPROCESSORS_ONLN) # find nthreads for make -j
 
+# CONTAINER_REGISTRY
+CONTAINER_REGISTRY:=gricad-registry.univ-grenoble-alpes.fr/osug/jmmc/containers/
+
 # $(shell grep -c '^processor' /proc/cpuinfo)
 
 
@@ -60,11 +63,16 @@ publish: $(TAR_FILE)
 
 push:
 	@echo "Please login first using next command if your push fails ():"
-	@echo " docker login gricad-registry.univ-grenoble-alpes.fr/osug/jmmc/containers/"
-	docker tag $(NAME):$(VERSION) gricad-registry.univ-grenoble-alpes.fr/osug/jmmc/containers/$(NAME):$(VERSION)
-	docker push gricad-registry.univ-grenoble-alpes.fr/osug/jmmc/containers/$(NAME):$(VERSION)
+	@echo " docker login $(CONTAINER_REGISTRY)"
+	docker tag $(NAME):$(VERSION) $(CONTAINER_REGISTRY)$(NAME):$(VERSION)
+	docker push $(CONTAINER_REGISTRY)$(NAME):$(VERSION)
 	@echo "Please logout after your pushes:"
-	@echo " docker logout gricad-registry.univ-grenoble-alpes.fr/osug/jmmc/containers/"
+	@echo " docker logout $(CONTAINER_REGISTRY)"
+
+push_latest:
+	docker tag $(NAME):$(VERSION) $(CONTAINER_REGISTRY)$(NAME):latest
+	docker push $(CONTAINER_REGISTRY)$(NAME):latest
+
 
 exec-bsmem-ci-help:
 	docker run -it $(NAME):$(VERSION) bsmem-ci -h
