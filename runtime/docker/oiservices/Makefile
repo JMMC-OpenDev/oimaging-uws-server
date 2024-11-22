@@ -58,6 +58,13 @@ $(TAR_FILE):
 publish: $(TAR_FILE)
 	scp $(TAR_FILE) apps-old.jmmc.fr.to:/data/docker/
 
+push:
+	@echo "Please login first using next command if your push fails ():"
+	@echo " docker login gricad-registry.univ-grenoble-alpes.fr/osug/jmmc/containers/"
+	docker tag $(NAME):$(VERSION) gricad-registry.univ-grenoble-alpes.fr/osug/jmmc/containers/$(NAME):$(VERSION)
+	docker push gricad-registry.univ-grenoble-alpes.fr/osug/jmmc/containers/$(NAME):$(VERSION)
+	@echo "Please logout after your pushes:"
+	@echo " docker logout gricad-registry.univ-grenoble-alpes.fr/osug/jmmc/containers/"
 
 exec-bsmem-ci-help:
 	docker run -it $(NAME):$(VERSION) bsmem-ci -h
