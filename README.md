@@ -23,8 +23,8 @@ This module contains the source code of the JMMC OImaging UWS server:
 - java UWS server + ImageOI interface
 - Dockerfile to install image reconstruction software including:
   - BSMEM
-  - MIRA
-  - SPARCO (base on MIRA)
+  - MiRA
+  - SPARCO (based on MiRA)
   - WISARD
 
 To be continued...
@@ -44,4 +44,3 @@ See [README](https://github.com/JMMC-OpenDev/oimaging-uws-server/blob/master/run
 
 See [JMMC Java Build](https://github.com/JMMC-OpenDev/jmmc-java-build)
 See [CI nightly builds](https://github.com/JMMC-OpenDev/jmmc-java-build/actions/workflows/build.yml)
-

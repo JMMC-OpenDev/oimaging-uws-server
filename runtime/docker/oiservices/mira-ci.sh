@@ -4,21 +4,21 @@
 #*******************************************************************************
 
 #
-# MIRA wrapper for OIMAGING
+# MiRA wrapper for OIMAGING
 #
 
 
-# TRAP: Do not leave children jobs running if the shell has been cancelled
+# TRAP: Do not leave children jobs running if the shell has been canceled
 cleanup_trap() {
     CHILDREN_PIDS=$(jobs -p)
     if [ -n "$CHILDREN_PIDS" ]
     then
         trap - EXIT
-        echo -e "SHELL cancelled, stopping $CHILDREN_PIDS"
+        echo -e "SHELL canceled, stopping $CHILDREN_PIDS"
         # we may try to send only TERM before a pause and a last loop with KILL signal ?
         kill $CHILDREN_PIDS
 
-        echo -e "SHELL cancelled, waiting on $CHILDREN_PIDS"
+        echo -e "SHELL canceled, waiting on $CHILDREN_PIDS"
         # wait for all pids
         for pid in $CHILDREN_PIDS; do
             wait $pid
@@ -27,7 +27,7 @@ cleanup_trap() {
         CHILDREN_PIDS=$(jobs -p)
         if [ -n "$CHILDREN_PIDS" ]
         then
-            echo -e "SHELL cancelled, killing $CHILDREN_PIDS"
+            echo -e "SHELL canceled, killing $CHILDREN_PIDS"
             kill -9 $CHILDREN_PIDS
         fi
   fi
@@ -56,7 +56,7 @@ function printUsage ()
 }
 
 
-# command-line parameters will be given to MIRA
+# command-line parameters will be given to MiRA
 # just check
 if [ $# -lt 2 ]
 then
