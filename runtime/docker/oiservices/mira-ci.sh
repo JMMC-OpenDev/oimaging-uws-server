@@ -4,21 +4,21 @@
 #*******************************************************************************
 
 #
-# MIRA wrapper for OIMAGING
+# MiRA wrapper for OIMAGING
 #
 
 
-# TRAP: Do not leave children jobs running if the shell has been cancelled
+# TRAP: Do not leave children jobs running if the shell has been canceled
 cleanup_trap() {
     CHILDREN_PIDS=$(jobs -p)
     if [ -n "$CHILDREN_PIDS" ]
     then
         trap - EXIT
-        echo -e "SHELL cancelled, stopping $CHILDREN_PIDS"
+        echo -e "SHELL canceled, stopping $CHILDREN_PIDS"
         # we may try to send only TERM before a pause and a last loop with KILL signal ?
         kill $CHILDREN_PIDS
 
-        echo -e "SHELL cancelled, waiting on $CHILDREN_PIDS"
+        echo -e "SHELL canceled, waiting on $CHILDREN_PIDS"
         # wait for all pids
         for pid in $CHILDREN_PIDS; do
             wait $pid
@@ -27,7 +27,7 @@ cleanup_trap() {
         CHILDREN_PIDS=$(jobs -p)
         if [ -n "$CHILDREN_PIDS" ]
         then
-            echo -e "SHELL cancelled, killing $CHILDREN_PIDS"
+            echo -e "SHELL canceled, killing $CHILDREN_PIDS"
             kill -9 $CHILDREN_PIDS
         fi
   fi
@@ -56,7 +56,7 @@ function printUsage ()
 }
 
 
-# command-line parameters will be given to MIRA
+# command-line parameters will be given to MiRA
 # just check
 if [ $# -lt 2 ]
 then
@@ -84,24 +84,9 @@ cd $SCRIPTROOT
 
 echo "MIRA_CI_VERSION: ${MIRA_CI_VERSION}"
 
-# If env var is defined, assume we are remote on the JMMC servers.
-if [ -z "$MIRA_CI_VERSION" ]
-then
-  if [ -z "$IDL_STARTUP" ] #if we have no IDL env available....
-  then
-    export GDL_STARTUP="gdl_startup.pro"
-    echo "DEBUG: using startup procedure $GDL_STARTUP"
-  else
-    echo "DEBUG: using startup procedure $IDL_STARTUP"
-  fi
-else
-  # add helper to launch gdl properly. this procedure shoudl insure that the IDL/GDL !PATH contains idlastro procedures (readfits.pro etc).
-  export GDL_STARTUP="gdl_startup.pro"
-fi
-
 # start mira and get intermediate result
-echo "cmd: \"ymira -oi-imaging -save_visibilities -save_initial $CLIARGS\""
-ymira -oi-imaging -save_visibilities -save_initial $CLIARGS
+echo "cmd: \"ymira -oi-imaging -save_data_model -save_initial $CLIARGS\""
+ymira -oi-imaging -save_data_model -save_initial $CLIARGS
 
 # produce compliant oifits for OIMAGING:
 if [ -e "${OUTPUT}" ] ; then
@@ -118,27 +103,4 @@ if [ -e "${OUTPUT}" ] ; then
       echo "---"
     fi
 
-    TMPOUTPUT="${OUTPUT}.tmp"
-    mv "${OUTPUT}" "${TMPOUTPUT}"
-
-    CONVERT_COMMAND="model2oifits,'"$INPUT"','${TMPOUTPUT}','"$OUTPUT"'"
-
-    cd $WISARD_DIR
-    gdl -e "$CONVERT_COMMAND" 2>&1
-
-    # clean intermediate file
-    if [ -e "${TMPOUTPUT}" ] ; then rm "${TMPOUTPUT}" ; fi
-
-    # Check OUTPUT:
-    if [ "$FITS_VERIFY" -eq "1" ] ; then
-      echo ""
-      echo "--- fitsverify $OUTPUT ---"
-      fitsverify -q $OUTPUT
-      if [ $? != 0 ] ; then fitsverify $OUTPUT; fi
-      echo "---"
-      echo "--- fitsverify $OUTPUT ---"
-      dfits -x 0 $OUTPUT
-      echo "---"
-    fi    
 fi
-
