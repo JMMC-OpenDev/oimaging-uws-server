@@ -145,6 +145,7 @@ RUN set -eux ; \
 
 ENV MIRA_CI_VERSION="emmt/MiRA"
 
+ARG YETI_VERSION="6.8.1"
 ARG IPY_VERSION="2.0.0"
 ARG YOIFITS_VERSION="1.2.0"
 
@@ -184,12 +185,10 @@ RUN set -eux ; \
     wget -q https://github.com/emmt/ylib/archive/master.zip && \
     unzip -q master.zip && rm master.zip && cd ylib-master/ && \
     ./configure && make install && cd /opt && rm -rf ylib-master && \
-    wget -q https://github.com/emmt/Yeti/archive/master.zip && \
-    unzip -q master.zip && rm master.zip && cd Yeti-master && \
-    ./configure --with-fftw=no --with-regex=no --with-tiff=no && \
-    make $MAKE_OPTS all && make install && cd /opt && rm -rf Yeti-master && \
-# disable Yeti ?
-    # cd /opt/yorick/i-start && ln -s ../i0/yeti.i yeti.i && \
+    wget -q "https://github.com/emmt/Yeti/archive/v${YETI_VERSION}.zip" && \
+    unzip -q "v${YETI_VERSION}.zip" && rm "v${YETI_VERSION}.zip" && cd "Yeti-${YETI_VERSION}" && \
+    ./configure --with-fftw=no --with-regex=no --with-tiff=no && \cd
+    make $MAKE_OPTS all && make install && cd /opt && rm -rf "Yeti-${YETI_VERSION}" && \
     wget -q "https://github.com/emmt/IPY/archive/v${IPY_VERSION}.zip" && \
     unzip -q "v${IPY_VERSION}.zip" && rm "v${IPY_VERSION}.zip" && cd "IPY-${IPY_VERSION}" && \
     ./configure --cflags="$GCC_OPTS" && make $MAKE_OPTS && make install && cd /opt && rm -rf "IPY-${IPY_VERSION}" && \
