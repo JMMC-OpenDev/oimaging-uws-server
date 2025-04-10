@@ -157,8 +157,8 @@ RUN set -eux ; \
 #    apk add --update --no-cache rlwrap && \
 # rlwrap is only used in interpreter mode (skipped)
     BUILD_DATE=`date -Is` && \
-    BUILD_PKG="make gcc g++ gfortran zip libtiff5-dev libfftw3-dev libgsl-dev" && \
-    apt-get update && apt-get install -y --no-install-recommends $BUILD_PKG unzip libtiff5 libtiffxx5 libfftw3-single3 libfftw3-double3 libgsl?? && \
+    BUILD_PKG="make gcc g++ gfortran zip libfftw3-dev libgsl-dev" && \
+    apt-get update && apt-get install -y --no-install-recommends $BUILD_PKG unzip libfftw3-single3 libfftw3-double3 libgsl?? && \
     mkdir -p /opt && cd /opt && \
     wget -q https://github.com/dhmunro/yorick/archive/master.zip && \
     unzip -q master.zip && rm master.zip && cd yorick-master && \
@@ -175,7 +175,7 @@ RUN set -eux ; \
 # with configure asked for install in /usr (/usr/lib is automatically found) + debian package renamed
 #RUN echo http://nl.alpinelinux.org/alpine/edge/testing >> /etc/apk/repositories && \
 #    apk add --update --no-cache --virtual .build-deps make wget build-base zip && \
-#    apk add --update --no-cache tiff-dev fftw-dev gsctsl-dev && \
+#    apk add --update --no-cache fftw-dev gsctsl-dev && \
     mkdir -p /opt && cd /opt && \
     wget -q https://github.com/emmt/XFFT/archive/master.zip && \
     unzip -q master.zip && rm master.zip && cd XFFT-master/ && \
@@ -186,7 +186,7 @@ RUN set -eux ; \
     ./configure && make install && cd /opt && rm -rf ylib-master && \
     wget -q https://github.com/emmt/Yeti/archive/master.zip && \
     unzip -q master.zip && rm master.zip && cd Yeti-master && \
-    ./configure --with-fftw=no --with-regex=yes --with-tiff=yes && \
+    ./configure --with-fftw=no --with-regex=no --with-tiff=no && \
     make $MAKE_OPTS all && make install && cd /opt && rm -rf Yeti-master && \
 # disable Yeti ?
     # cd /opt/yorick/i-start && ln -s ../i0/yeti.i yeti.i && \
