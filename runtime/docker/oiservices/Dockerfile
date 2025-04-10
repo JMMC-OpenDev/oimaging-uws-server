@@ -208,9 +208,6 @@ RUN set -eux ; \
     wget -q https://github.com/emmt/ygsl/archive/master.zip && \
     unzip -q master.zip && rm master.zip && cd ygsl-master && \
     ./configure --cflags="$GCC_OPTS" && make $MAKE_OPTS && make install && cd /opt && rm -rf ygsl-master && \
-    wget -q https://github.com/emmt/YFITSIO/archive/master.zip && \
-    unzip -q master.zip && rm master.zip && cd YFITSIO-master && \
-    ./configure --cflags="$GCC_OPTS" && make $MAKE_OPTS && make install && cd /opt && rm -rf YFITSIO-master && \
     wget -q https://github.com/emmt/YTotVar/archive/master.zip && \
     unzip -q master.zip && rm master.zip && cd YTotVar-master && \
     yorick -batch make.i && make $MAKE_OPTS && make install && cd /opt && rm -rf YTotVar-master && \
