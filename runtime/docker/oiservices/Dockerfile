@@ -146,6 +146,7 @@ RUN set -eux ; \
 ENV MIRA_CI_VERSION="emmt/MiRA"
 
 ARG IPY_VERSION="2.0.0"
+ARG OPTIMPACKLEGACY_VERSION="1.4.3"
 ARG YETI_VERSION="6.8.1"
 ARG YLIB_VERSION="2.0.0"
 ARG YOIFITS_VERSION="1.2.0"
@@ -193,9 +194,9 @@ RUN set -eux ; \
     unzip -q "v${IPY_VERSION}.zip" && rm "v${IPY_VERSION}.zip" && cd "IPY-${IPY_VERSION}" && \
     ./configure --cflags="$GCC_OPTS" && make $MAKE_OPTS && make install && cd /opt && rm -rf "IPY-${IPY_VERSION}" && \
 # Install OptimPackLegacy.
-    wget -q https://github.com/emmt/OptimPackLegacy/archive/master.zip && \
-    unzip -q master.zip && rm master.zip && cd OptimPackLegacy-master/yorick && \
-    ./configure --cflags="$GCC_OPTS" && make $MAKE_OPTS && make install && cd /opt && rm -rf OptimPackLegacy-master && \
+    wget -q "https://github.com/emmt/OptimPackLegacy/archive/v${OPTIMPACKLEGACY_VERSION}.zip" && \
+    unzip -q "v${OPTIMPACKLEGACY_VERSION}.zip" && rm "v${OPTIMPACKLEGACY_VERSION}.zip" && cd "OptimPackLegacy-${OPTIMPACKLEGACY_VERSION}/yorick" && \
+    ./configure --cflags="$GCC_OPTS" && make $MAKE_OPTS && make install && cd /opt && rm -rf "OptimPackLegacy-${OPTIMPACKLEGACY_VERSION}" && \
 # Install YOIFITS.
     wget -q "https://github.com/emmt/YOIFITS/archive/v${YOIFITS_VERSION}.zip" && \
     unzip -q "v${YOIFITS_VERSION}.zip" && rm "v${YOIFITS_VERSION}.zip" && cd "YOIFITS-${YOIFITS_VERSION}" && \
