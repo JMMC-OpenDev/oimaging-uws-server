@@ -149,6 +149,7 @@ ARG IPY_VERSION="2.0.0"
 ARG YETI_VERSION="6.8.1"
 ARG YLIB_VERSION="2.0.0"
 ARG YOIFITS_VERSION="1.2.0"
+ARG YNFFT_VERSION="1.0.4"
 
 # install Yorick
 # inspired from https://hub.docker.com/r/ferreol/yorick/~/dockerfile/
@@ -159,8 +160,8 @@ RUN set -eux ; \
 #    apk add --update --no-cache rlwrap && \
 # rlwrap is only used in interpreter mode (skipped)
     BUILD_DATE=`date -Is` && \
-    BUILD_PKG="make gcc g++ gfortran zip libfftw3-dev" && \
-    apt-get update && apt-get install -y --no-install-recommends $BUILD_PKG unzip libfftw3-single3 libfftw3-double3 && \
+    BUILD_PKG="make gcc g++ gfortran zip" && \
+    apt-get update && apt-get install -y --no-install-recommends $BUILD_PKG unzip libnfft3-dev && \
     mkdir -p /opt && cd /opt && \
     wget -q https://github.com/dhmunro/yorick/archive/master.zip && \
     unzip -q master.zip && rm master.zip && cd yorick-master && \
@@ -205,20 +206,10 @@ RUN set -eux ; \
 #    apk add --update --no-cache --virtual .build-deps bash git make wget build-base zip && \
 #    apk add --update --no-cache fftw-dev && \
     mkdir -p /opt && cd /opt && \
-# nfft
-    wget -q https://www-user.tu-chemnitz.de/~potts/nfft/download/nfft-3.5.1.tar.gz && \
-    tar -xzf nfft-3*.tar.gz >/dev/null 2>&1 && rm nfft-3*.tar.gz && cd nfft-3* && \
-    export CFLAGS="$GCC_OPTS" && \
-    sed -i "1s/sh/bash/" configure && \
-# disable openmp: --enable-openmp
-    ./configure --enable-nnfft --enable-openmp=no --enable-applications=no --enable-examples=no && \
-    make $MAKE_OPTS && make install && unset CFLAGS && \
-    cd .. && rm -rf nfft-3* && rm -rf /usr/local/share/doc/nfft && \
-    wget -q https://github.com/emmt/ynfft/archive/master.zip && \
-    unzip -q master.zip && rm master.zip && cd ynfft-master/ && \
-# disable openmp: -fopenmp
-    ./configure --cflags="$GCC_OPTS -I/usr/local/include -pedantic -std=c99" && \
-    make $MAKE_OPTS && make install && cd /opt && rm -rf ynfft-master && \
+    wget -q "https://github.com/emmt/ynfft/archive/v${YNFFT_VERSION}.zip" && \
+    unzip -q "v${YNFFT_VERSION}.zip" && rm "v${YNFFT_VERSION}.zip" && cd "ynfft-${YNFFT_VERSION}" && \
+    ./configure --cflags="$GCC_OPTS -pedantic -std=c99" && \
+    make $MAKE_OPTS && make install && cd /opt && rm -rf "ynfft-${YNFFT_VERSION}" && \
     wget -q https://github.com/${MIRA_CI_VERSION}/archive/master.zip && \
     echo "${MIRA_CI_VERSION}-$BUILD_DATE" > /opt/MIRA_CI_VERSION && \
     unzip master.zip && rm master.zip && cd MiRA-master/ && \
