@@ -176,12 +176,6 @@ RUN set -eux ; \
 #    apk add --update --no-cache --virtual .build-deps make wget build-base zip && \
 #    apk add --update --no-cache tiff-dev fftw-dev gsctsl-dev && \
     mkdir -p /opt && cd /opt && \
-    wget -q http://heasarc.gsfc.nasa.gov/FTP/software/fitsio/c/cfitsio_latest.tar.gz && \
-    tar -xzf cfitsio_latest.tar.gz >/dev/null 2>&1 && rm cfitsio_latest.tar.gz && cd cfitsio* && \
-    export CFLAGS="$GCC_OPTS" && \
-    ./configure --prefix=/usr/ && make $MAKE_OPTS && make install && \
-    unset CFLAGS && \
-    cd .. && rm -rf cfitsio* && \
     wget -q https://github.com/emmt/XFFT/archive/master.zip && \
     unzip -q master.zip && rm master.zip && cd XFFT-master/ && \
     ./configure --cflags="$GCC_OPTS" --with-fftw2=no --with-fftw2-threads=no && make $MAKE_OPTS && make install && \
