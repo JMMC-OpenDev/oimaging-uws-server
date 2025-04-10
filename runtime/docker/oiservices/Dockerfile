@@ -318,7 +318,7 @@ RUN set -eux ; \
 # notes:
 # - CONTEXT_PATH is not honored : app dir is the basename of the war (OImaging-uws here)
 # - use webapps-javaee to take advantage of tomcat10 migration keeping our war using "old" Java EE before moving to Jakarta EE
-ENV INSTALL_WEBAPPDIR=$CATALINA_HOME/webapps-javaee 
+ENV INSTALL_WEBAPPDIR=$CATALINA_HOME/webapps-javaee
 RUN mkdir $INSTALL_WEBAPPDIR && \
     chown -R tomcat:tomcat $INSTALL_WEBAPPDIR && \
     echo "Installing war into the migration webapps-javaee folder : $INSTALL_WEBAPPDIR"
@@ -338,4 +338,3 @@ EXPOSE 8080
 # Set max server jobs (default 4):
 ARG SERVER_MAX_JOBS=4
 ENV SERVER_MAX_JOBS=${SERVER_MAX_JOBS}
-
