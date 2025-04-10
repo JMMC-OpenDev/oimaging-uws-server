@@ -192,9 +192,6 @@ RUN set -eux ; \
     wget -q https://github.com/emmt/OptimPackLegacy/archive/master.zip && \
     unzip -q master.zip && rm master.zip && cd OptimPackLegacy-master/yorick && \
     ./configure --cflags="$GCC_OPTS" && make $MAKE_OPTS && make install && cd /opt && rm -rf OptimPackLegacy-master && \
-    wget -q https://github.com/emmt/OptimPack/archive/master.zip && \
-    unzip -q master.zip && rm master.zip && cd OptimPack-master/yorick && \
-    ./configure --cflags="$GCC_OPTS" && make $MAKE_OPTS && make install && cd /opt && rm -rf OptimPack-master && \
     wget -q "https://github.com/emmt/YOIFITS/archive/v${YOIFITS_VERSION}.zip" && \
     unzip -q "v${YOIFITS_VERSION}.zip" && rm "v${YOIFITS_VERSION}.zip" && cd "YOIFITS-${YOIFITS_VERSION}" && \
     ./configure --cflags="$GCC_OPTS" && make $MAKE_OPTS && make install && cd /opt && rm -rf "YOIFITS-${YOIFITS_VERSION}" && \
