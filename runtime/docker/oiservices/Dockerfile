@@ -159,8 +159,8 @@ RUN set -eux ; \
 #    apk add --update --no-cache rlwrap && \
 # rlwrap is only used in interpreter mode (skipped)
     BUILD_DATE=`date -Is` && \
-    BUILD_PKG="make gcc g++ gfortran zip libfftw3-dev libgsl-dev" && \
-    apt-get update && apt-get install -y --no-install-recommends $BUILD_PKG unzip libfftw3-single3 libfftw3-double3 libgsl?? && \
+    BUILD_PKG="make gcc g++ gfortran zip libfftw3-dev" && \
+    apt-get update && apt-get install -y --no-install-recommends $BUILD_PKG unzip libfftw3-single3 libfftw3-double3 && \
     mkdir -p /opt && cd /opt && \
     wget -q https://github.com/dhmunro/yorick/archive/master.zip && \
     unzip -q master.zip && rm master.zip && cd yorick-master && \
@@ -198,9 +198,6 @@ RUN set -eux ; \
     wget -q "https://github.com/emmt/YOIFITS/archive/v${YOIFITS_VERSION}.zip" && \
     unzip -q "v${YOIFITS_VERSION}.zip" && rm "v${YOIFITS_VERSION}.zip" && cd "YOIFITS-${YOIFITS_VERSION}" && \
     ./configure --cflags="$GCC_OPTS" && make $MAKE_OPTS && make install && cd /opt && rm -rf "YOIFITS-${YOIFITS_VERSION}" && \
-    wget -q https://github.com/emmt/ygsl/archive/master.zip && \
-    unzip -q master.zip && rm master.zip && cd ygsl-master && \
-    ./configure --cflags="$GCC_OPTS" && make $MAKE_OPTS && make install && cd /opt && rm -rf ygsl-master && \
 #    apk del .build-deps && \
 #    rm -rf /var/cache/apk/*
 #
