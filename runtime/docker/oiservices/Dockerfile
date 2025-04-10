@@ -172,44 +172,40 @@ RUN set -eux ; \
 #    rm -rf /var/cache/apk/* /opt/yorick/doc/* && \
     touch /opt/yorick/yorick.commands && \
 #
-#
-# install Yeti
+# Install MiRA and its dependencies.
 # inspired from https://hub.docker.com/r/ferreol/yeti/~/dockerfile/
 # with configure asked for install in /usr (/usr/lib is automatically found) + debian package renamed
 #RUN echo http://nl.alpinelinux.org/alpine/edge/testing >> /etc/apk/repositories && \
 #    apk add --update --no-cache --virtual .build-deps make wget build-base zip && \
 #    apk add --update --no-cache fftw-dev gsctsl-dev && \
     mkdir -p /opt && cd /opt && \
+# Install YLIB.
     wget -q "https://github.com/emmt/ylib/archive/v${YLIB_VERSION}.zip" && \
     unzip -q "v${YLIB_VERSION}.zip" && rm "v${YLIB_VERSION}.zip" && cd "ylib-${YLIB_VERSION}" && \
     ./configure && make install && cd /opt && rm -rf "ylib-${YLIB_VERSION}" && \
+# Install Yeti.
     wget -q "https://github.com/emmt/Yeti/archive/v${YETI_VERSION}.zip" && \
     unzip -q "v${YETI_VERSION}.zip" && rm "v${YETI_VERSION}.zip" && cd "Yeti-${YETI_VERSION}" && \
     ./configure --with-fftw=no --with-regex=no --with-tiff=no && \cd
     make $MAKE_OPTS all && make install && cd /opt && rm -rf "Yeti-${YETI_VERSION}" && \
+# Install IPY.
     wget -q "https://github.com/emmt/IPY/archive/v${IPY_VERSION}.zip" && \
     unzip -q "v${IPY_VERSION}.zip" && rm "v${IPY_VERSION}.zip" && cd "IPY-${IPY_VERSION}" && \
     ./configure --cflags="$GCC_OPTS" && make $MAKE_OPTS && make install && cd /opt && rm -rf "IPY-${IPY_VERSION}" && \
+# Install OptimPackLegacy.
     wget -q https://github.com/emmt/OptimPackLegacy/archive/master.zip && \
     unzip -q master.zip && rm master.zip && cd OptimPackLegacy-master/yorick && \
     ./configure --cflags="$GCC_OPTS" && make $MAKE_OPTS && make install && cd /opt && rm -rf OptimPackLegacy-master && \
+# Install YOIFITS.
     wget -q "https://github.com/emmt/YOIFITS/archive/v${YOIFITS_VERSION}.zip" && \
     unzip -q "v${YOIFITS_VERSION}.zip" && rm "v${YOIFITS_VERSION}.zip" && cd "YOIFITS-${YOIFITS_VERSION}" && \
     ./configure --cflags="$GCC_OPTS" && make $MAKE_OPTS && make install && cd /opt && rm -rf "YOIFITS-${YOIFITS_VERSION}" && \
-#    apk del .build-deps && \
-#    rm -rf /var/cache/apk/*
-#
-#
-# install MiRA
-# inspired from https://hub.docker.com/r/ferreol/mira/~/dockerfile/
-#RUN echo http://nl.alpinelinux.org/alpine/edge/testing >> /etc/apk/repositories && \
-#    apk add --update --no-cache --virtual .build-deps bash git make wget build-base zip && \
-#    apk add --update --no-cache fftw-dev && \
-    mkdir -p /opt && cd /opt && \
+# Install YNFFT.
     wget -q "https://github.com/emmt/ynfft/archive/v${YNFFT_VERSION}.zip" && \
     unzip -q "v${YNFFT_VERSION}.zip" && rm "v${YNFFT_VERSION}.zip" && cd "ynfft-${YNFFT_VERSION}" && \
     ./configure --cflags="$GCC_OPTS -pedantic -std=c99" && \
     make $MAKE_OPTS && make install && cd /opt && rm -rf "ynfft-${YNFFT_VERSION}" && \
+# Install MiRA.
     wget -q https://github.com/${MIRA_CI_VERSION}/archive/master.zip && \
     echo "${MIRA_CI_VERSION}-$BUILD_DATE" > /opt/MIRA_CI_VERSION && \
     unzip master.zip && rm master.zip && cd MiRA-master/ && \
