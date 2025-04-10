@@ -146,6 +146,7 @@ RUN set -eux ; \
 ENV MIRA_CI_VERSION="emmt/MiRA"
 
 ARG IPY_VERSION="2.0.0"
+ARG YOIFITS_VERSION="1.2.0"
 
 # install Yorick
 # inspired from https://hub.docker.com/r/ferreol/yorick/~/dockerfile/
@@ -198,9 +199,9 @@ RUN set -eux ; \
     wget -q https://github.com/emmt/OptimPack/archive/master.zip && \
     unzip -q master.zip && rm master.zip && cd OptimPack-master/yorick && \
     ./configure --cflags="$GCC_OPTS" && make $MAKE_OPTS && make install && cd /opt && rm -rf OptimPack-master && \
-    wget -q https://github.com/emmt/YOIFITS/archive/master.zip && \
-    unzip -q master.zip && rm master.zip && cd YOIFITS-master && \
-    ./configure --cflags="$GCC_OPTS" && make $MAKE_OPTS && make install && cd /opt && rm -rf YOIFITS-master && \
+    wget -q "https://github.com/emmt/YOIFITS/archive/v${YOIFITS_VERSION}.zip" && \
+    unzip -q "v${YOIFITS_VERSION}.zip" && rm "v${YOIFITS_VERSION}.zip" && cd "YOIFITS-${YOIFITS_VERSION}" && \
+    ./configure --cflags="$GCC_OPTS" && make $MAKE_OPTS && make install && cd /opt && rm -rf "YOIFITS-${YOIFITS_VERSION}" && \
     wget -q https://github.com/emmt/YImage/archive/master.zip && \
     unzip -q master.zip && rm master.zip && cd YImage-master && \
     ./configure --cflags="$GCC_OPTS" && make $MAKE_OPTS && make install && cd /opt && rm -rf YImage-master && \
