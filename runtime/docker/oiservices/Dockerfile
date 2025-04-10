@@ -145,6 +145,8 @@ RUN set -eux ; \
 
 ENV MIRA_CI_VERSION="emmt/MiRA"
 
+ARG IPY_VERSION="2.0.0"
+
 # install Yorick
 # inspired from https://hub.docker.com/r/ferreol/yorick/~/dockerfile/
 RUN set -eux ; \
@@ -193,9 +195,9 @@ RUN set -eux ; \
     make $MAKE_OPTS all && make install && cd /opt && rm -rf Yeti-master && \
 # disable Yeti ?
     # cd /opt/yorick/i-start && ln -s ../i0/yeti.i yeti.i && \
-    wget -q https://github.com/emmt/IPY/archive/master.zip && \
-    unzip -q master.zip && rm master.zip && cd IPY-master && \
-    ./configure --cflags="$GCC_OPTS" && make $MAKE_OPTS && make install && cd /opt && rm -rf IPY-master && \
+    wget -q "https://github.com/emmt/IPY/archive/v${IPY_VERSION}.zip" && \
+    unzip -q "v${IPY_VERSION}.zip" && rm "v${IPY_VERSION}.zip" && cd "IPY-${IPY_VERSION}" && \
+    ./configure --cflags="$GCC_OPTS" && make $MAKE_OPTS && make install && cd /opt && rm -rf "IPY-${IPY_VERSION}" && \
     wget -q https://github.com/emmt/OptimPackLegacy/archive/master.zip && \
     unzip -q master.zip && rm master.zip && cd OptimPackLegacy-master/yorick && \
     ./configure --cflags="$GCC_OPTS" && make $MAKE_OPTS && make install && cd /opt && rm -rf OptimPackLegacy-master && \
