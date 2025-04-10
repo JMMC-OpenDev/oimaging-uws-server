@@ -178,10 +178,6 @@ RUN set -eux ; \
 #    apk add --update --no-cache --virtual .build-deps make wget build-base zip && \
 #    apk add --update --no-cache fftw-dev gsctsl-dev && \
     mkdir -p /opt && cd /opt && \
-    wget -q https://github.com/emmt/XFFT/archive/master.zip && \
-    unzip -q master.zip && rm master.zip && cd XFFT-master/ && \
-    ./configure --cflags="$GCC_OPTS" --with-fftw2=no --with-fftw2-threads=no && make $MAKE_OPTS && make install && \
-    cd .. && rm -rf XFFT-master && \
     wget -q https://github.com/emmt/ylib/archive/master.zip && \
     unzip -q master.zip && rm master.zip && cd ylib-master/ && \
     ./configure && make install && cd /opt && rm -rf ylib-master && \
