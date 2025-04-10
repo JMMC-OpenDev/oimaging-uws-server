@@ -145,8 +145,9 @@ RUN set -eux ; \
 
 ENV MIRA_CI_VERSION="emmt/MiRA"
 
-ARG YETI_VERSION="6.8.1"
 ARG IPY_VERSION="2.0.0"
+ARG YETI_VERSION="6.8.1"
+ARG YLIB_VERSION="2.0.0"
 ARG YOIFITS_VERSION="1.2.0"
 
 # install Yorick
@@ -178,9 +179,9 @@ RUN set -eux ; \
 #    apk add --update --no-cache --virtual .build-deps make wget build-base zip && \
 #    apk add --update --no-cache fftw-dev gsctsl-dev && \
     mkdir -p /opt && cd /opt && \
-    wget -q https://github.com/emmt/ylib/archive/master.zip && \
-    unzip -q master.zip && rm master.zip && cd ylib-master/ && \
-    ./configure && make install && cd /opt && rm -rf ylib-master && \
+    wget -q "https://github.com/emmt/ylib/archive/v${YLIB_VERSION}.zip" && \
+    unzip -q "v${YLIB_VERSION}.zip" && rm "v${YLIB_VERSION}.zip" && cd "ylib-${YLIB_VERSION}" && \
+    ./configure && make install && cd /opt && rm -rf "ylib-${YLIB_VERSION}" && \
     wget -q "https://github.com/emmt/Yeti/archive/v${YETI_VERSION}.zip" && \
     unzip -q "v${YETI_VERSION}.zip" && rm "v${YETI_VERSION}.zip" && cd "Yeti-${YETI_VERSION}" && \
     ./configure --with-fftw=no --with-regex=no --with-tiff=no && \cd
