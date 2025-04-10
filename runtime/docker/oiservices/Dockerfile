@@ -143,7 +143,7 @@ RUN set -eux ; \
 #  MiRA
 #
 
-ENV MIRA_CI_VERSION="emmt/MiRA"
+ENV MIRA_CI_VERSION="2.5.1"
 
 ARG IPY_VERSION="2.0.0"
 ARG OPTIMPACKLEGACY_VERSION="1.4.3"
@@ -207,11 +207,12 @@ RUN set -eux ; \
     ./configure --cflags="$GCC_OPTS -pedantic -std=c99" && \
     make $MAKE_OPTS && make install && cd /opt && rm -rf "ynfft-${YNFFT_VERSION}" && \
 # Install MiRA.
-    wget -q https://github.com/${MIRA_CI_VERSION}/archive/master.zip && \
-    echo "${MIRA_CI_VERSION}-$BUILD_DATE" > /opt/MIRA_CI_VERSION && \
-    unzip master.zip && rm master.zip && cd MiRA-master/ && \
+    wget -q "https://github.com/emmt/MiRA/archive/v${MIRA_CI_VERSION}.zip" && \
+    echo "v${MIRA_CI_VERSION}-$BUILD_DATE" > /opt/MIRA_CI_VERSION && \
+    unzip -q "v${MIRA_CI_VERSION}.zip" && rm "v${MIRA_CI_VERSION}.zip" && cd "MiRA-${MIRA_CI_VERSION}" && \
     ./configure --prefix=/usr/local && make $MAKE_OPTS install && \
-    cd /opt && rm -rf MiRA-master && rm -rf /opt/yorick/doc && \
+    cd /opt && rm -rf "MiRA-${MIRA_CI_VERSION}" && \
+    rm -rf /opt/yorick/doc && \
 #    apk del .build-deps && \
 #    rm -rf /var/cache/apk/* && rm -rf /usr/local/share/doc
     apt-get purge --auto-remove -y $BUILD_PKG && rm -rf /var/lib/apt/lists/* ; \
