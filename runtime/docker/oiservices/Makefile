@@ -9,7 +9,15 @@
 
 include ../oiservices/common.mk
 
-NAME=oiservices
+TAR_FILE=$(NAME)-$(VERSION).tar
+
+# Define the max running jobs on the OImaging server within docker (hard-coded as docker image is not prepared on server VM)
+SERVER_MAX_JOBS:=8
+
+SERVER_MEM_LIMIT:=8g
+SERVER_PORT:=81
+
+
 
 
 # The OMP_THREAD_LIMIT environment variable sets the maximum number of OpenMP threads to use in a contention group
