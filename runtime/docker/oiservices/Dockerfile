@@ -145,7 +145,21 @@ RUN set -eux ; \
 #  MiRA
 #
 
-ENV MIRA_CI_VERSION="emmt/MiRA"
+ENV MIRA_CI_VERSION="2.5.2"
+
+# To install the master version of MiRA:
+ARG MIRA_ZIP="master.zip"
+ARG MIRA_SRCDIR="MiRA-master"
+# else:
+#ARG MIRA_ZIP="v${MIRA_CI_VERSION}.zip"
+#ARG MIRA_SRCDIR="MiRA-${MIRA_CI_VERSION}"
+
+ARG IPY_VERSION="2.0.0"
+ARG OPTIMPACKLEGACY_VERSION="1.4.3"
+ARG YETI_VERSION="6.8.1"
+ARG YLIB_VERSION="2.0.0"
+ARG YOIFITS_VERSION="1.2.0"
+ARG YNFFT_VERSION="1.0.4"
 
 # install Yorick
 # inspired from https://hub.docker.com/r/ferreol/yorick/~/dockerfile/
@@ -156,8 +170,8 @@ RUN set -eux ; \
 #    apk add --update --no-cache rlwrap && \
 # rlwrap is only used in interpreter mode (skipped)
     BUILD_DATE=`date -Is` && \
-    BUILD_PKG="make gcc g++ gfortran zip libtiff5-dev libfftw3-dev libgsl-dev" && \
-    apt-get update && apt-get install -y --no-install-recommends $BUILD_PKG unzip libtiff5 libtiffxx5 libfftw3-single3 libfftw3-double3 libgsl?? && \
+    BUILD_PKG="make gcc g++ gfortran zip" && \
+    apt-get update && apt-get install -y --no-install-recommends $BUILD_PKG unzip libnfft3-dev && \
     mkdir -p /opt && cd /opt && \
     wget -q https://github.com/dhmunro/yorick/archive/master.zip && \
     unzip -q master.zip && rm master.zip && cd yorick-master && \
@@ -168,86 +182,54 @@ RUN set -eux ; \
 #    rm -rf /var/cache/apk/* /opt/yorick/doc/* && \
     touch /opt/yorick/yorick.commands && \
 #
-#
-# install Yeti
+# Install MiRA and its dependencies.
 # inspired from https://hub.docker.com/r/ferreol/yeti/~/dockerfile/
 # with configure asked for install in /usr (/usr/lib is automatically found) + debian package renamed
 #RUN echo http://nl.alpinelinux.org/alpine/edge/testing >> /etc/apk/repositories && \
 #    apk add --update --no-cache --virtual .build-deps make wget build-base zip && \
-#    apk add --update --no-cache tiff-dev fftw-dev gsctsl-dev && \
+#    apk add --update --no-cache fftw-dev gsctsl-dev && \
     mkdir -p /opt && cd /opt && \
-    wget -q http://heasarc.gsfc.nasa.gov/FTP/software/fitsio/c/cfitsio_latest.tar.gz && \
-    tar -xzf cfitsio_latest.tar.gz >/dev/null 2>&1 && rm cfitsio_latest.tar.gz && cd cfitsio* && \
-    export CFLAGS="$GCC_OPTS" && \
-    ./configure --prefix=/usr/ && make $MAKE_OPTS && make install && \
-    unset CFLAGS && \
-    cd .. && rm -rf cfitsio* && \
-    wget -q https://github.com/emmt/XFFT/archive/master.zip && \
-    unzip -q master.zip && rm master.zip && cd XFFT-master/ && \
-    ./configure --cflags="$GCC_OPTS" --with-fftw2=no --with-fftw2-threads=no && make $MAKE_OPTS && make install && \
-    cd .. && rm -rf XFFT-master && \
-    wget -q https://github.com/emmt/ylib/archive/master.zip && \
-    unzip -q master.zip && rm master.zip && cd ylib-master/ && \
-    ./configure && make install && cd /opt && rm -rf ylib-master && \
-    wget -q https://github.com/emmt/Yeti/archive/master.zip && \
-    unzip -q master.zip && rm master.zip && cd Yeti-master && \
-    ./configure --with-fftw=no --with-regex=yes --with-tiff=yes && \
-    make $MAKE_OPTS all && make install && cd /opt && rm -rf Yeti-master && \
-# disable Yeti ?
-    # cd /opt/yorick/i-start && ln -s ../i0/yeti.i yeti.i && \
-    wget -q https://github.com/emmt/IPY/archive/master.zip && \
-    unzip -q master.zip && rm master.zip && cd IPY-master && \
-    ./configure --cflags="$GCC_OPTS" && make $MAKE_OPTS && make install && cd /opt && rm -rf IPY-master && \
-    wget -q https://github.com/emmt/OptimPackLegacy/archive/master.zip && \
-    unzip -q master.zip && rm master.zip && cd OptimPackLegacy-master/yorick && \
-    ./configure --cflags="$GCC_OPTS" && make $MAKE_OPTS && make install && cd /opt && rm -rf OptimPackLegacy-master && \
-    wget -q https://github.com/emmt/OptimPack/archive/master.zip && \
-    unzip -q master.zip && rm master.zip && cd OptimPack-master/yorick && \
-    ./configure --cflags="$GCC_OPTS" && make $MAKE_OPTS && make install && cd /opt && rm -rf OptimPack-master && \
-    wget -q https://github.com/emmt/YOIFITS/archive/master.zip && \
-    unzip -q master.zip && rm master.zip && cd YOIFITS-master && \
-    ./configure --cflags="$GCC_OPTS" && make $MAKE_OPTS && make install && cd /opt && rm -rf YOIFITS-master && \
-    wget -q https://github.com/emmt/YImage/archive/master.zip && \
-    unzip -q master.zip && rm master.zip && cd YImage-master && \
-    ./configure --cflags="$GCC_OPTS" && make $MAKE_OPTS && make install && cd /opt && rm -rf YImage-master && \
-    wget -q https://github.com/emmt/ygsl/archive/master.zip && \
-    unzip -q master.zip && rm master.zip && cd ygsl-master && \
-    ./configure --cflags="$GCC_OPTS" && make $MAKE_OPTS && make install && cd /opt && rm -rf ygsl-master && \
-    wget -q https://github.com/emmt/YFITSIO/archive/master.zip && \
-    unzip -q master.zip && rm master.zip && cd YFITSIO-master && \
-    ./configure --cflags="$GCC_OPTS" && make $MAKE_OPTS && make install && cd /opt && rm -rf YFITSIO-master && \
-    wget -q https://github.com/emmt/YTotVar/archive/master.zip && \
-    unzip -q master.zip && rm master.zip && cd YTotVar-master && \
-    yorick -batch make.i && make $MAKE_OPTS && make install && cd /opt && rm -rf YTotVar-master && \
-#    apk del .build-deps && \
-#    rm -rf /var/cache/apk/*
-#
-#
-# install MiRA
-# inspired from https://hub.docker.com/r/ferreol/mira/~/dockerfile/
-#RUN echo http://nl.alpinelinux.org/alpine/edge/testing >> /etc/apk/repositories && \
-#    apk add --update --no-cache --virtual .build-deps bash git make wget build-base zip && \
-#    apk add --update --no-cache fftw-dev && \
-    mkdir -p /opt && cd /opt && \
-# nfft
-    wget -q https://www-user.tu-chemnitz.de/~potts/nfft/download/nfft-3.5.1.tar.gz && \
-    tar -xzf nfft-3*.tar.gz >/dev/null 2>&1 && rm nfft-3*.tar.gz && cd nfft-3* && \
-    export CFLAGS="$GCC_OPTS" && \
-    sed -i "1s/sh/bash/" configure && \
-# disable openmp: --enable-openmp
-    ./configure --enable-nnfft --enable-openmp=no --enable-applications=no --enable-examples=no && \
-    make $MAKE_OPTS && make install && unset CFLAGS && \
-    cd .. && rm -rf nfft-3* && rm -rf /usr/local/share/doc/nfft && \
-    wget -q https://github.com/emmt/ynfft/archive/master.zip && \
-    unzip -q master.zip && rm master.zip && cd ynfft-master/ && \
-# disable openmp: -fopenmp
-    ./configure --cflags="$GCC_OPTS -I/usr/local/include -pedantic -std=c99" && \
-    make $MAKE_OPTS && make install && cd /opt && rm -rf ynfft-master && \
-    wget -q https://github.com/${MIRA_CI_VERSION}/archive/master.zip && \
-    echo "${MIRA_CI_VERSION}-$BUILD_DATE" > /opt/MIRA_CI_VERSION && \
-    unzip master.zip && rm master.zip && cd MiRA-master/ && \
+# Install YLIB.
+    wget -q "https://github.com/emmt/ylib/archive/v${YLIB_VERSION}.zip" && \
+    unzip -q "v${YLIB_VERSION}.zip" && rm "v${YLIB_VERSION}.zip" && cd "ylib-${YLIB_VERSION}" && \
+    ./configure && make install && cd /opt && rm -rf "ylib-${YLIB_VERSION}" && \
+# Install Yeti.
+    wget -q "https://github.com/emmt/Yeti/archive/v${YETI_VERSION}.zip" && \
+    unzip -q "v${YETI_VERSION}.zip" && rm "v${YETI_VERSION}.zip" && cd "Yeti-${YETI_VERSION}" && \
+    ./configure --with-fftw=no --with-regex=no --with-tiff=no && \cd
+    make $MAKE_OPTS all && make install && cd /opt && rm -rf "Yeti-${YETI_VERSION}" && \
+# Install IPY.
+    wget -q "https://github.com/emmt/IPY/archive/v${IPY_VERSION}.zip" && \
+    unzip -q "v${IPY_VERSION}.zip" && rm "v${IPY_VERSION}.zip" && cd "IPY-${IPY_VERSION}" && \
+    ./configure --cflags="$GCC_OPTS" && make $MAKE_OPTS && make install && cd /opt && rm -rf "IPY-${IPY_VERSION}" && \
+# Install OptimPackLegacy.
+    wget -q "https://github.com/emmt/OptimPackLegacy/archive/v${OPTIMPACKLEGACY_VERSION}.zip" && \
+    unzip -q "v${OPTIMPACKLEGACY_VERSION}.zip" && rm "v${OPTIMPACKLEGACY_VERSION}.zip" && cd "OptimPackLegacy-${OPTIMPACKLEGACY_VERSION}/yorick" && \
+    ./configure --cflags="$GCC_OPTS" && make $MAKE_OPTS && make install && cd /opt && rm -rf "OptimPackLegacy-${OPTIMPACKLEGACY_VERSION}" && \
+# Install VMLMB.
+    wget -q "https://github.com/emmt/VMLMB/archive/master.zip" && \
+    unzip -q "master.zip" && rm "master.zip" && cd "VMLMB-main/yorick" && \
+    ./configure && make install && cd /opt && rm -rf "VMLMB-main" && \
+# Install YOR-VOPS.
+    wget -q "https://github.com/emmt/yor-vops/archive/master.zip" && \
+    unzip -q "master.zip" && rm "master.zip" && cd "yor-vops-master" && \
+    ./configure cflags="$GCC_OPTS" && make $MAKE_OPTS && make install && cd /opt && rm -rf "yor-vops-master" && \
+# Install YOIFITS.
+    wget -q "https://github.com/emmt/YOIFITS/archive/v${YOIFITS_VERSION}.zip" && \
+    unzip -q "v${YOIFITS_VERSION}.zip" && rm "v${YOIFITS_VERSION}.zip" && cd "YOIFITS-${YOIFITS_VERSION}" && \
+    ./configure --cflags="$GCC_OPTS" && make $MAKE_OPTS && make install && cd /opt && rm -rf "YOIFITS-${YOIFITS_VERSION}" && \
+# Install YNFFT.
+    wget -q "https://github.com/emmt/ynfft/archive/v${YNFFT_VERSION}.zip" && \
+    unzip -q "v${YNFFT_VERSION}.zip" && rm "v${YNFFT_VERSION}.zip" && cd "ynfft-${YNFFT_VERSION}" && \
+    ./configure --cflags="$GCC_OPTS -pedantic -std=c99" && \
+    make $MAKE_OPTS && make install && cd /opt && rm -rf "ynfft-${YNFFT_VERSION}" && \
+# Install MiRA.
+    wget -q "https://github.com/emmt/MiRA/archive/${MIRA_ZIP}" && \
+    echo "v${MIRA_CI_VERSION}-$BUILD_DATE" > /opt/MIRA_CI_VERSION && \
+    unzip -q "${MIRA_ZIP}" && rm "${MIRA_ZIP}" && cd "${MIRA_SRCDIR}" && \
     ./configure --prefix=/usr/local && make $MAKE_OPTS install && \
-    cd /opt && rm -rf MiRA-master && rm -rf /opt/yorick/doc && \
+    cd /opt && rm -rf "${MIRA_SRCDIR}" && \
+    rm -rf /opt/yorick/doc && \
 #    apk del .build-deps && \
 #    rm -rf /var/cache/apk/* && rm -rf /usr/local/share/doc
     apt-get purge --auto-remove -y $BUILD_PKG && rm -rf /var/lib/apt/lists/* ; \
@@ -327,7 +309,7 @@ RUN set -eux ; \
 # notes:
 # - CONTEXT_PATH is not honored : app dir is the basename of the war (OImaging-uws here)
 # - use webapps-javaee to take advantage of tomcat10 migration keeping our war using "old" Java EE before moving to Jakarta EE
-ENV INSTALL_WEBAPPDIR=$CATALINA_HOME/webapps-javaee 
+ENV INSTALL_WEBAPPDIR=$CATALINA_HOME/webapps-javaee
 RUN mkdir $INSTALL_WEBAPPDIR && \
     chown -R tomcat:tomcat $INSTALL_WEBAPPDIR && \
     echo "Installing war into the migration webapps-javaee folder : $INSTALL_WEBAPPDIR"
@@ -347,4 +329,3 @@ EXPOSE 8080
 # Set max server jobs (default 4):
 ARG SERVER_MAX_JOBS=4
 ENV SERVER_MAX_JOBS=${SERVER_MAX_JOBS}
-
