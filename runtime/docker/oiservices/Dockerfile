@@ -204,6 +204,10 @@ RUN set -eux ; \
     wget -q "https://github.com/emmt/OptimPackLegacy/archive/v${OPTIMPACKLEGACY_VERSION}.zip" && \
     unzip -q "v${OPTIMPACKLEGACY_VERSION}.zip" && rm "v${OPTIMPACKLEGACY_VERSION}.zip" && cd "OptimPackLegacy-${OPTIMPACKLEGACY_VERSION}/yorick" && \
     ./configure --cflags="$GCC_OPTS" && make $MAKE_OPTS && make install && cd /opt && rm -rf "OptimPackLegacy-${OPTIMPACKLEGACY_VERSION}" && \
+# Install VMLMB.
+    wget -q "https://github.com/emmt/VMLMB/archive/master.zip" && \
+    unzip -q "master.zip" && rm "master.zip" && cd "VMLMB-main/yorick" && \
+    ./configure && make install && cd /opt && rm -rf "VMLMB-main" && \
 # Install YOIFITS.
     wget -q "https://github.com/emmt/YOIFITS/archive/v${YOIFITS_VERSION}.zip" && \
     unzip -q "v${YOIFITS_VERSION}.zip" && rm "v${YOIFITS_VERSION}.zip" && cd "YOIFITS-${YOIFITS_VERSION}" && \
