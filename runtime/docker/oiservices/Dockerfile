@@ -196,7 +196,7 @@ RUN set -eux ; \
 # Install Yeti.
     wget -q "https://github.com/emmt/Yeti/archive/v${YETI_VERSION}.zip" && \
     unzip -q "v${YETI_VERSION}.zip" && rm "v${YETI_VERSION}.zip" && cd "Yeti-${YETI_VERSION}" && \
-    ./configure --with-fftw=no --with-regex=no --with-tiff=no && \cd
+    ./configure --with-fftw=no --with-regex=no --with-tiff=no && \
     make $MAKE_OPTS all && make install && cd /opt && rm -rf "Yeti-${YETI_VERSION}" && \
 # Install IPY.
     wget -q "https://github.com/emmt/IPY/archive/v${IPY_VERSION}.zip" && \
