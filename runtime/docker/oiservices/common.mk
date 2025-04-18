@@ -76,17 +76,12 @@
 #   - fix GDL build
 # History 3.7.2 (2024.09.16):
 #   - updated docker base image moving to tomcat10 using webapps-javaee migration folder
+# History 3.7.4 (2025.04.15):
+#   - updated docker base image to get last MiRA version (that fixes missing model data)
 
 
-VERSION=3.7.3
-
-TAR_FILE=$(NAME)-$(VERSION).tar
-
-# Define the max running jobs on the OImaging server within docker (hard-coded as docker image is not prepared on server VM)
-SERVER_MAX_JOBS:=8
-
-SERVER_MEM_LIMIT:=8g
-SERVER_PORT:=81
+NAME=oiservices
+VERSION=3.7.4
 
 # EoF
 

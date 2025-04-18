@@ -36,7 +36,9 @@ RUN set -eux ; \
 #ARG GCC_OPTS="-O3 -march=broadwell -mfpmath=sse -fomit-frame-pointer -fstrict-aliasing -DNDEBUG -pipe"
 
 # LBO: use native to get max performance on local machine
-ARG GCC_OPTS="-O3 -march=native -mfpmath=sse -fomit-frame-pointer -fstrict-aliasing -DNDEBUG -pipe"
+#ARG GCC_OPTS="-O3 -march=native -mfpmath=sse -fomit-frame-pointer -fstrict-aliasing -DNDEBUG -pipe"
+# GM  remove native arch because it will be compiled on a CI and b executed on another cluster
+ARG GCC_OPTS="-O3 -mfpmath=sse -fomit-frame-pointer -fstrict-aliasing -DNDEBUG -pipe"
 
 ARG USE_VALGRIND=0
 # For Valgrind:
