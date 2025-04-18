@@ -78,10 +78,12 @@
 #   - updated docker base image moving to tomcat10 using webapps-javaee migration folder
 # History 3.7.4 (2025.04.15):
 #   - updated docker base image to get last MiRA version (that fixes missing model data)
+# History 3.7.5 (2025.04.18):
+#   - updated docker base image to get better MiRA dependencies and plugins
 
 
 NAME=oiservices
-VERSION=3.7.4
+VERSION=3.7.5
 
 # EoF
 
