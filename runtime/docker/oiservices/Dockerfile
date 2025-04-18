@@ -143,7 +143,14 @@ RUN set -eux ; \
 #  MiRA
 #
 
-ENV MIRA_CI_VERSION="2.5.1"
+ENV MIRA_CI_VERSION="2.5.2"
+
+# To install the master version of MiRA:
+ARG MIRA_ZIP="master.zip"
+ARG MIRA_SRCDIR="MiRA-master"
+# else:
+#ARG MIRA_ZIP="v${MIRA_CI_VERSION}.zip"
+#ARG MIRA_SRCDIR="MiRA-${MIRA_CI_VERSION}"
 
 ARG IPY_VERSION="2.0.0"
 ARG OPTIMPACKLEGACY_VERSION="1.4.3"
@@ -207,11 +214,11 @@ RUN set -eux ; \
     ./configure --cflags="$GCC_OPTS -pedantic -std=c99" && \
     make $MAKE_OPTS && make install && cd /opt && rm -rf "ynfft-${YNFFT_VERSION}" && \
 # Install MiRA.
-    wget -q "https://github.com/emmt/MiRA/archive/v${MIRA_CI_VERSION}.zip" && \
+    wget -q "https://github.com/emmt/MiRA/archive/${MIRA_ZIP}" && \
     echo "v${MIRA_CI_VERSION}-$BUILD_DATE" > /opt/MIRA_CI_VERSION && \
-    unzip -q "v${MIRA_CI_VERSION}.zip" && rm "v${MIRA_CI_VERSION}.zip" && cd "MiRA-${MIRA_CI_VERSION}" && \
+    unzip -q "${MIRA_ZIP}" && rm "${MIRA_ZIP}" && cd "${MIRA_SRCDIR}" && \
     ./configure --prefix=/usr/local && make $MAKE_OPTS install && \
-    cd /opt && rm -rf "MiRA-${MIRA_CI_VERSION}" && \
+    cd /opt && rm -rf "${MIRA_SRCDIR}" && \
     rm -rf /opt/yorick/doc && \
 #    apk del .build-deps && \
 #    rm -rf /var/cache/apk/* && rm -rf /usr/local/share/doc
