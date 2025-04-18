@@ -12,7 +12,7 @@ FROM tomcat:10-jdk11-temurin-jammy
 
 # Running docker with ubuntu distribution
 ENV DEBIAN_FRONTEND=noninteractive
-
+RUN echo run
 RUN set -eux ; \
     apt-get install apt-transport-https -y && \
     apt-get update && apt-get upgrade -y && \
@@ -171,7 +171,7 @@ RUN set -eux ; \
 # rlwrap is only used in interpreter mode (skipped)
     BUILD_DATE=`date -Is` && \
     BUILD_PKG="make gcc g++ gfortran zip" && \
-    apt-get update && apt-get install -y --no-install-recommends $BUILD_PKG unzip libnfft3-dev && \
+    apt-get update && apt-get install -y --no-install-recommends $BUILD_PKG clang unzip libnfft3-dev && \
     mkdir -p /opt && cd /opt && \
     wget -q https://github.com/dhmunro/yorick/archive/master.zip && \
     unzip -q master.zip && rm master.zip && cd yorick-master && \
